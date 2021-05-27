@@ -5,7 +5,7 @@ import axios from 'axios';
 
 //  超时
 axios.defaults.timeout = 100000;
-axios.defaults.baseURL = 'http://fmu.tencentcloudapi.com';
+axios.defaults.baseURL = 'https://service-85njmqp6-1259710574.gz.apigw.tencentcs.com/release/'
 
 /**
  * http request 拦截器
@@ -51,7 +51,6 @@ export function get(url: string, params = {}) {
         params: params,
       })
       .then((response) => {
-        landing(url, params, response.data);
         resolve(response.data);
       })
       .catch((error) => {
@@ -68,25 +67,11 @@ export function get(url: string, params = {}) {
  */
 
 export function post(url: string, data: any) {
-  let date = new Date()
   return new Promise((resolve, reject) => {
     axios
-      .post(url, data, {
-        headers: {
-          // v3 签名 数据类型：json
-          'Content-Type': 'application/json;charset=UTF-8',
-          // 必须公共参数 Header
-          'X-TC-Action':'StyleImagePro',
-          'X-TC-Timestamp':+ date,
-          'X-TC-Version':'2019-12-13',
-          'Authorization':`TC3-HMAC-SHA256 Credential=AKID4xaw1pNdcJjtmOimZ5LL4WgZBVYJo1xb/${date.toUTCString()}/fmu/tc3_request, SignedHeaders=content-type;host, Signature=fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024`,
-
-
-        },
-      })
+      .post(url, data)
       .then(
         (response) => {
-          //关闭进度条
           resolve(response.data);
         },
         (err) => {
@@ -144,16 +129,5 @@ function msag(err: any) {
         break;
       default:
     }
-  }
-}
-
-/**
- * 查看返回的数据
- * @param url
- * @param params
- * @param data
- */
-function landing(url: string, params: any, data: any) {
-  if (data.code === -1) {
   }
 }
